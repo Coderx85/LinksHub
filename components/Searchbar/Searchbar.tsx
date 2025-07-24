@@ -106,24 +106,19 @@ export const Searchbar: React.FC<SearchbarProps> = ({
   useEffect(() => {
     const handleClickOutsideDropdown = (e: MouseEvent) => {
       if (
-        e.target &&
-        (e.target as HTMLElement).closest(
-          "[data-custom='restrict-click-outside']"
-        ) !== null
+        formRef.current &&
+        !formRef.current.contains(e.target as Node)
       ) {
-        return
+        dispatchSearch({ type: 'close_suggestions' });
       }
-      if ((formRef.current as HTMLFormElement).contains(e.target as Node))
-        return
-      dispatchSearch({ type: 'close_suggestions' })
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutsideDropdown)
+    document.addEventListener('mousedown', handleClickOutsideDropdown);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutsideDropdown)
-    }
-  }, [dispatchSearch])
+      document.removeEventListener('mousedown', handleClickOutsideDropdown);
+    };
+  }, [dispatchSearch]);
 
   return (
     <form
@@ -134,7 +129,7 @@ export const Searchbar: React.FC<SearchbarProps> = ({
       role="search"
     >
       <div className="relative">
-        <div className="relative w-full h-12 flex items-center justify-between border border border-theme-secondary/25 dark:border-none rounded-lg">
+        <div className="relative w-full h-12 flex items-center justify-between border border-theme-secondary/25 dark:border-none rounded-lg">
           <label htmlFor="simple-search" className="sr-only">
             Quick search
           </label>
